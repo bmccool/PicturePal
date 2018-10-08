@@ -1,8 +1,8 @@
 import sys
 from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
-    QVBoxLayout, QDialog)
+    QVBoxLayout, QDialog, QFileSystemModel, QTreeView)
 from PySide2.QtQuick import QQuickView
-from PySide2.QtCore import QUrl
+from PySide2.QtCore import QUrl, QDir
 
 class Form(QDialog):
 
@@ -25,8 +25,10 @@ class Form(QDialog):
         print ("Hello %s" % self.edit.text())
 
 if __name__ == '__main__':
-    # Create the Qt Application
     app = QApplication(sys.argv)
+    
+    
+    # Create the Qt Application
     # Create and show the form
     #form = Form()
     #form.show()
@@ -35,4 +37,16 @@ if __name__ == '__main__':
     view.setSource(url)
     view.show()
     # Run the main Qt loop
+    
+
+    
+    """
+    # Shows a file tree view of current direcoty
+    model = QFileSystemModel()
+    model.setRootPath(QDir.currentPath())
+
+    tree =  QTreeView()
+    tree.setModel(model)
+    tree.show()
     sys.exit(app.exec_())
+    """
