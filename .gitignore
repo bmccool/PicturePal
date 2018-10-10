@@ -1,0 +1,11 @@
+
+*.toc
+build/SimpleDialog/base_library.zip
+build/SimpleDialog/PKG-00.pkg
+build/SimpleDialog/PYZ-00.pyz
+build/SimpleDialog/SimpleDialog.exe.manifest
+build/SimpleDialog/warn-SimpleDialog.txt
+build/SimpleDialog/xref-SimpleDialog.html
+FileBrowser.qml Example.qml
+SimpleDialog.qmlc
+SimpleDialog.spec

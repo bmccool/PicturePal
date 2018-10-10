@@ -27,7 +27,7 @@ class Form(QDialog):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     
-    
+
     # Create the Qt Application
     # Create and show the form
     #form = Form()
@@ -48,5 +48,6 @@ if __name__ == '__main__':
     tree =  QTreeView()
     tree.setModel(model)
     tree.show()
-    sys.exit(app.exec_())
+
     """
+    sys.exit(app.exec_())
