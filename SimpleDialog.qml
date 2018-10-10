@@ -38,9 +38,29 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
+        z: 2
         onClicked: {
             loader.active = !loader.active
         }
+    }
+
+    ListModel {
+        id: folderModel
+    }
+
+    Component {
+        id: folderDelegate
+        Row {
+            spacing: 10
+            Text { text: folder }
+        }
+    }
+
+    ListView {
+        anchors.fill: parent
+        model: folderModel
+        delegate: folderDelegate
+        z: 1
     }
 
 
@@ -59,7 +79,9 @@ Rectangle {
             folder: shortcuts.home
             // TODO do we need to Qt.quit()?
             onAccepted: {
-                console.log("You chose: " + fileDialog.fileUrls)
+                console.log("You chose: " + fileDialog.fileUrl)
+                folderModel.append({"folder": fileDialog.fileUrl.toString()})
+                console.log("There are " + folderModel.count + " items in folderModel")
                 loader.active = false
                 //Qt.quit()
             }
