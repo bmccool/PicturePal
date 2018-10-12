@@ -3,38 +3,10 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import Qt.labs.folderlistmodel 2.1
 
-
-
-/*
 Rectangle {
-    width: 200
-    height: 200
-    color: "green"
-
-    TreeView {
-        TableViewColumn {
-            title: "Name"
-            role: "fileName"
-            width: 100
-        }
-        TableViewColumn {
-            title: "Permissions"
-            role: "filePermissions"
-            width: 100
-        }
-        //model: fileSystemModel
-        model: folderModel
-    }
-}
-*/
-
-
-// This opens a file picker
-
-Rectangle {
-    width: 200
-    height: 200
-    color: "green"
+    id: root
+    width: parent.width
+    height: parent.height
 
     MouseArea {
         anchors.fill: parent
@@ -44,23 +16,42 @@ Rectangle {
         }
     }
 
-    ListModel {
-        id: folderModel
-    }
+//    ListModel {
+//        id: folderModel
+//    }
 
-    Component {
-        id: folderDelegate
-        Row {
-            spacing: 10
-            Text { text: folder }
-        }
-    }
+//    Component {
+//        id: folderDelegate
+//        Row {
+//            spacing: 10
+//            Text { text: folder }
+//        }
+//    }
+
+//    Component {
+//        id: pictureDelegate
+//        Row {
+//            spacing: 10
+//            Text {text: display}
+//        }
+//    }
 
     ListView {
         anchors.fill: parent
-        model: folderModel
-        delegate: folderDelegate
-        z: 1
+        anchors.leftMargin: 25
+        anchors.rightMargin: 25
+        anchors.bottomMargin: 25
+        anchors.topMargin: 25
+
+        model: myModel//folderModel
+        //delegate: pictureDelegate//folderDelegate
+        delegate: Text {
+            anchors.leftMargin: 50
+            font.pointSize: 15
+            horizontalAlignment: Text.AlignHCenter
+            text: display
+        }
+        z: 3
     }
 
 
@@ -77,18 +68,15 @@ Rectangle {
             title: "Please choose a folder"
             selectFolder: true
             folder: shortcuts.home
-            // TODO do we need to Qt.quit()?
             onAccepted: {
                 console.log("You chose: " + fileDialog.fileUrl)
                 folderModel.append({"folder": fileDialog.fileUrl.toString()})
                 console.log("There are " + folderModel.count + " items in folderModel")
                 loader.active = false
-                //Qt.quit()
             }
             onRejected: {
                 console.log("Canceled")
                 loader.active = false
-                //Qt.quit()
             }
             Component.onCompleted: visible = true
         }
