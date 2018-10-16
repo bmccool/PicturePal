@@ -2,7 +2,7 @@ import sys
 from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
     QVBoxLayout, QDialog, QFileSystemModel, QTreeView)
 from PySide2.QtQuick import QQuickView
-from PySide2.QtCore import QUrl, QDir, QStringListModel
+from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Property
 
 from picture_utils import *
 
@@ -27,6 +27,25 @@ class Form(QDialog):
         print ("Hello %s" % self.edit.text())
 
 
+class Backend(QObject):
+    textChanged = Signal(str)
+
+    def __init__(self, parent=None):
+        QObject.__init__(self, parent)
+        self.m_text = ""
+
+    @Property(str, notify=textChanged)
+    def text(self):
+        return self.m_text
+
+    @text.setter
+    def setText(self, text):
+        if self.m_text == text:
+            return
+        self.m_text = text
+        self.textChanged.emit(self.m_text)
+    
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -41,6 +60,8 @@ if __name__ == '__main__':
 
     #Pictures is a list, Keywords is a dict
     
+    backend = Backend()
+    backend.textChanged.connect(lambda text: print(text))
 
 
     # Create the Qt Application
@@ -57,6 +78,7 @@ if __name__ == '__main__':
     my_model.setStringList(captions)
     print(captions)
     view.rootContext().setContextProperty("myModel", my_model)
+    view.rootContext().setContextProperty("backend", backend)
 
     view.setSource(url)
     view.show()

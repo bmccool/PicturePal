@@ -9,3 +9,4 @@ build/SimpleDialog/xref-SimpleDialog.html
 FileBrowser.qml Example.qml
 SimpleDialog.qmlc
 SimpleDialog.spec
+*.pyc

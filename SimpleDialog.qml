@@ -12,7 +12,9 @@ Rectangle {
         anchors.fill: parent
         z: 2
         onClicked: {
-            loader.active = !loader.active
+            backend.text = "THIS IS THE BACKEND TEST"
+            //loader.active = !loader.active
+
         }
     }
 
