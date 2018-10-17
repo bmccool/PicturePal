@@ -2,11 +2,25 @@ import QtQuick 2.1
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import Qt.labs.folderlistmodel 2.1
+import QtQuick.Layouts 1.11
 
-Rectangle {
+ApplicationWindow {
     id: root
-    width: parent.width
-    height: parent.height
+    title: qsTr("PicturePal")
+    width: 640
+    height: 480
+    visible: true
+
+    toolBar:ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+
+            }
+            ToolButton {}
+            ToolButton {}
+        }
+    }
 
     MouseArea {
         anchors.fill: parent

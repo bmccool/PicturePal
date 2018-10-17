@@ -3,6 +3,7 @@ from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
     QVBoxLayout, QDialog, QFileSystemModel, QTreeView)
 from PySide2.QtQuick import QQuickView
 from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Property
+from PySide2.QtQml import QQmlApplicationEngine
 
 from picture_utils import *
 
@@ -70,8 +71,10 @@ if __name__ == '__main__':
     # Create and show the form
     #form = Form()
     #form.show()
-    view = QQuickView()
-    view.setResizeMode(QQuickView.SizeRootObjectToView)
+    engine = QQmlApplicationEngine()
+
+    #view = QQuickView()
+    #view.setResizeMode(QQuickView.SizeRootObjectToView)
     url = QUrl("SimpleDialog.qml")
 
     backend = Backend()
@@ -80,11 +83,16 @@ if __name__ == '__main__':
 
     #Expose a model to the QML code
 
-    view.rootContext().setContextProperty("myModel", backend.model)
-    view.rootContext().setContextProperty("backend", backend)
+    #view.rootContext().setContextProperty("myModel", backend.model)
+    #view.rootContext().setContextProperty("backend", backend)
+    engine.rootContext().setContextProperty("myModel", backend.model)
+    engine.rootContext().setContextProperty("backend", backend)
 
-    view.setSource(url)
-    view.show()
+    #view.setSource(url)
+    engine.load(url)
+    win = engine.rootObjects()[0]
+    win.show()
+    #view.show()
     # Run the main Qt loop
     
 
