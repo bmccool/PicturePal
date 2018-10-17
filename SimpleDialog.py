@@ -47,7 +47,6 @@ class Backend(QObject):
         self.textChanged.emit(self.m_text)
 
     def processFolder(self, folder):
-        print("PROCESSING FOLDER")
         folder = folder.strip("file:///") # Remove unnecessary bits
         pictures = None
         pictures = get_all_pictures(folder)

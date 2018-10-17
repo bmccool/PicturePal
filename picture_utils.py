@@ -50,12 +50,12 @@ def get_keywords(pictures):
                 keywords[word] = keywords[word] + 1
     return keywords
 
-def get_all_pictures(relative_path, pictures=None):
+def get_all_pictures(path, pictures=None):
     if pictures == None:
         logger.debug("list is empty")
         pictures = []
     logger.debug("There are " + str(len(pictures)) + " pictures already.")
-    path = "./" + relative_path
+    path = os.path.abspath(path)
     for file in os.listdir(path):
         pictures.append(process_file(path + "/" + file))
     logger.debug("There are " + str(len(pictures)) + " pictures now.")
