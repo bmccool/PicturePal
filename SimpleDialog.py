@@ -33,6 +33,7 @@ class Backend(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
         self.m_text = ""
+        self.model = QStringListModel()
 
     @Property(str, notify=textChanged)
     def text(self):
@@ -44,24 +45,26 @@ class Backend(QObject):
             return
         self.m_text = text
         self.textChanged.emit(self.m_text)
+
+    def processFolder(self, folder):
+        print("PROCESSING FOLDER")
+        folder = folder.strip("file:///") # Remove unnecessary bits
+        pictures = None
+        pictures = get_all_pictures(folder)
+        keywords = get_keywords(pictures)
+        keywords = sort_dict(keywords)
+        captions = []
+        for picture in pictures:
+            captions.append(str(picture[1]))
+        #Pictures is a list, Keywords is a dict
+        self.model.setStringList(captions)
     
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    
-    pictures = None
-    pictures = get_all_pictures("Pictures")
-    keywords = get_keywords(pictures)
-    keywords = sort_dict(keywords)
-    captions = []
-    for picture in pictures:
-        captions.append(str(picture[1]))
+        
 
-    #Pictures is a list, Keywords is a dict
-    
-    backend = Backend()
-    backend.textChanged.connect(lambda text: print(text))
 
 
     # Create the Qt Application
@@ -72,12 +75,13 @@ if __name__ == '__main__':
     view.setResizeMode(QQuickView.SizeRootObjectToView)
     url = QUrl("SimpleDialog.qml")
 
+    backend = Backend()
+    #backend.textChanged.connect(lambda text: print(text))
+    backend.textChanged.connect(lambda text: backend.processFolder(text))
 
     #Expose a model to the QML code
-    my_model = QStringListModel()
-    my_model.setStringList(captions)
-    print(captions)
-    view.rootContext().setContextProperty("myModel", my_model)
+
+    view.rootContext().setContextProperty("myModel", backend.model)
     view.rootContext().setContextProperty("backend", backend)
 
     view.setSource(url)

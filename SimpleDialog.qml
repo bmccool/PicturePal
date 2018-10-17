@@ -12,31 +12,30 @@ Rectangle {
         anchors.fill: parent
         z: 2
         onClicked: {
-            backend.text = "THIS IS THE BACKEND TEST"
-            //loader.active = !loader.active
+            loader.active = !loader.active
 
         }
     }
 
-//    ListModel {
-//        id: folderModel
-//    }
+    ListModel {
+        id: folderModel
+    }
 
-//    Component {
-//        id: folderDelegate
-//        Row {
-//            spacing: 10
-//            Text { text: folder }
-//        }
-//    }
+    Component {
+        id: folderDelegate
+        Row {
+            spacing: 10
+            Text { text: folder }
+        }
+    }
 
-//    Component {
-//        id: pictureDelegate
-//        Row {
-//            spacing: 10
-//            Text {text: display}
-//        }
-//    }
+    Component {
+        id: pictureDelegate
+        Row {
+            spacing: 10
+            Text {text: display}
+        }
+    }
 
     ListView {
         anchors.fill: parent
@@ -45,15 +44,15 @@ Rectangle {
         anchors.bottomMargin: 25
         anchors.topMargin: 25
 
-        model: myModel//folderModel
-        //delegate: pictureDelegate//folderDelegate
+        model: myModel//folderModel//myModel
+        //delegate: folderDelegate//pictureDelegate
         delegate: Text {
             anchors.leftMargin: 50
             font.pointSize: 15
             horizontalAlignment: Text.AlignHCenter
             text: display
         }
-        z: 3
+        z: 1
     }
 
 
@@ -72,6 +71,7 @@ Rectangle {
             folder: shortcuts.home
             onAccepted: {
                 console.log("You chose: " + fileDialog.fileUrl)
+                backend.text = fileDialog.fileUrl.toString()
                 folderModel.append({"folder": fileDialog.fileUrl.toString()})
                 console.log("There are " + folderModel.count + " items in folderModel")
                 loader.active = false
