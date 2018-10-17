@@ -62,11 +62,9 @@ ApplicationWindow {
 
         model: pictureModel//folderModel//myModel
         //delegate: folderDelegate//pictureDelegate
-        delegate: Text {
-            anchors.leftMargin: 50
-            font.pointSize: 15
-            horizontalAlignment: Text.AlignHCenter
-            text: name
+        delegate: Row {
+            Text { text: name }
+            Text { text: caption }
         }
         z: 1
     }
