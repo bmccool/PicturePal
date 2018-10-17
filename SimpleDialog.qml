@@ -15,10 +15,12 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             ToolButton {
-
+                text: "Add Folder"
+                onClicked: { loader.active = !loader.active }
             }
-            ToolButton {}
-            ToolButton {}
+            ToolButton {text: "Add Filter"}
+            ToolButton {text: "Show Pictures"}
+            Item { Layout.fillWidth:true }
         }
     }
 
@@ -58,13 +60,13 @@ ApplicationWindow {
         anchors.bottomMargin: 25
         anchors.topMargin: 25
 
-        model: myModel//folderModel//myModel
+        model: pictureModel//folderModel//myModel
         //delegate: folderDelegate//pictureDelegate
         delegate: Text {
             anchors.leftMargin: 50
             font.pointSize: 15
             horizontalAlignment: Text.AlignHCenter
-            text: display
+            text: name
         }
         z: 1
     }

@@ -2,31 +2,40 @@ import sys
 from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
     QVBoxLayout, QDialog, QFileSystemModel, QTreeView)
 from PySide2.QtQuick import QQuickView
-from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Property
+from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Property, QAbstractItemModel, QAbstractListModel, Qt, QModelIndex
 from PySide2.QtQml import QQmlApplicationEngine
+
 
 from picture_utils import *
 
-class Form(QDialog):
+class PictureModel(QAbstractListModel):
+    FilenameRole = Qt.UserRole + 1
+    CaptionRole = Qt.UserRole + 2
 
-    def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
-        # Create widgets
-        self.edit = QLineEdit("Write my name here")
-        self.button = QPushButton("Show Greetings")
-        # Create layout and add widgets
-        layout = QVBoxLayout()
-        layout.addWidget(self.edit)
-        layout.addWidget(self.button)
-        # Set dialog layout
-        self.setLayout(layout)
-        # Add button signal to greetings slot
-        self.button.clicked.connect(self.greetings)
+    _roles = {FilenameRole: b"name", CaptionRole: b"caption"}
 
-    # Greets the user
-    def greetings(self):
-        print ("Hello %s" % self.edit.text())
+    def __init__(self):
+        super(PictureModel, self).__init__()
+        self._pictures = []
 
+    def setPictureList(self, pictures):
+        self.beginResetModel()
+        self._pictures = pictures
+        self.endResetModel()
+
+    def rowCount(self, in_index):
+        return len(self._pictures)
+
+    def data(self, QModelIndex, role=None):
+        row = QModelIndex.row()
+        if role == self.FilenameRole:
+            return str(self._pictures[row][0])
+
+        if role == self.CaptionRole:
+            return str(self._pictures[row][1])
+
+    def roleNames(self):
+        return self._roles
 
 class Backend(QObject):
     textChanged = Signal(str)
@@ -34,7 +43,9 @@ class Backend(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
         self.m_text = ""
-        self.model = QStringListModel()
+        self.pictureModel = PictureModel()
+        self.pictures = None
+        self.keywords = None
 
     @Property(str, notify=textChanged)
     def text(self):
@@ -49,32 +60,18 @@ class Backend(QObject):
 
     def processFolder(self, folder):
         folder = folder.strip("file:///") # Remove unnecessary bits
-        pictures = None
-        pictures = get_all_pictures(folder)
-        keywords = get_keywords(pictures)
-        keywords = sort_dict(keywords)
-        captions = []
-        for picture in pictures:
-            captions.append(str(picture[1]))
-        #Pictures is a list, Keywords is a dict
-        self.model.setStringList(captions)
-    
-
+        #TODO get_all_pictures shouldn't overwrite what's in pictures, but add to it.
+        self.pictures = get_all_pictures(folder)
+        #TODO this can be one line right?
+        self.keywords = get_keywords(self.pictures)
+        self.keywords = sort_dict(self.keywords)
+        #TODO keywords model?
+        self.pictureModel.setPictureList(self.pictures)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-        
-
-
-
-    # Create the Qt Application
-    # Create and show the form
-    #form = Form()
-    #form.show()
     engine = QQmlApplicationEngine()
 
-    #view = QQuickView()
-    #view.setResizeMode(QQuickView.SizeRootObjectToView)
     url = QUrl("SimpleDialog.qml")
 
     backend = Backend()
@@ -82,29 +79,12 @@ if __name__ == '__main__':
     backend.textChanged.connect(lambda text: backend.processFolder(text))
 
     #Expose a model to the QML code
-
-    #view.rootContext().setContextProperty("myModel", backend.model)
-    #view.rootContext().setContextProperty("backend", backend)
-    engine.rootContext().setContextProperty("myModel", backend.model)
+    engine.rootContext().setContextProperty("pictureModel", backend.pictureModel)
     engine.rootContext().setContextProperty("backend", backend)
 
-    #view.setSource(url)
     engine.load(url)
     win = engine.rootObjects()[0]
     win.show()
-    #view.show()
+
     # Run the main Qt loop
-    
-
-    
-    """
-    # Shows a file tree view of current direcoty
-    model = QFileSystemModel()
-    model.setRootPath(QDir.currentPath())
-
-    tree =  QTreeView()
-    tree.setModel(model)
-    tree.show()
-
-    """
     sys.exit(app.exec_())
