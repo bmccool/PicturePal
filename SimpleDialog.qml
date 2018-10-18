@@ -45,29 +45,34 @@ ApplicationWindow {
 
     Component {
         id: folderDelegate
-        Row {
-            spacing: 10
-            Text { text: folder }
-        }
-    }
-
-    Component {
-        id: pictureDelegate
-        Row {
-            spacing: 10
-            Text {text: display}
+        Item{
+            width: parent.width
+            height: 20
+            Row {
+                spacing: 10
+                Text { text: folder }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: folderView.currentIndex = index
+            }
         }
     }
 
     ListView {
+        id: folderView
         anchors.fill: parent
         anchors.leftMargin: 25
         anchors.rightMargin: 25
         anchors.bottomMargin: 25
         anchors.topMargin: 25
 
-        model: folderModel//pictureModel//folderModel//myModel
-        delegate: folderDelegate//pictureDelegate
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        focus: true
+
+        model: folderModel
+        delegate: folderDelegate
+        // How to show filename and caption from picture model
         //delegate: Row {
         //    Text { text: name }
         //    Text { text: caption }
