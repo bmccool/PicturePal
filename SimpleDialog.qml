@@ -54,8 +54,34 @@ ApplicationWindow {
             }
             MouseArea {
                 anchors.fill: parent
-                onClicked: folderView.currentIndex = index
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    folderView.currentIndex = index
+                    if (mouse.button === Qt.RightButton) {
+                        contextMenu.popup()
+                    }
+                }
+                Menu {
+                    id: contextMenu
+                    MenuItem { 
+                        text: "Remove folder"
+                        onTriggered: { removeFolder(index) }
+                    }
+                }
             }
+
+        }
+    }
+
+    function removeFolder(index) {
+        // Remove the folder from folderModel
+        folderModel.remove(index)
+        // Clear backend pictures
+        backend.clearPics()
+        // For each folder
+        for (var i = 0; i < folderModel.count; ++i) {
+            // Add folder to backend 
+            backend.text = folderModel.get(i).folder
         }
     }
 

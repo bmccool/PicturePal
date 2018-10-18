@@ -58,8 +58,10 @@ class Backend(QObject):
 
     @text.setter
     def setText(self, text):
-        if self.m_text == text:
-            return
+        # We want to get notified even if it is the same thing... right?
+        #TODO need to handle duplicates somehow...
+        #if self.m_text == text:
+        #    return
         self.m_text = text
         self.textChanged.emit(self.m_text)
 
@@ -80,6 +82,12 @@ class Backend(QObject):
     @Slot(result=int)
     def numPics(self):
         return self.pictureModel.rowCount(None)
+
+    @Slot()
+    def clearPics(self):
+        #TODO is deleting the model really the best way to do this?
+        del self.pictureModel
+        self.pictureModel = PictureModel()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
