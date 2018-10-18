@@ -83,6 +83,9 @@ class Backend(QObject):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setOrganizationName("McCoolStuff")
+    app.setOrganizationDomain("McCoolStuff.com")
+    app.setApplicationName("PicturePal")
     engine = QQmlApplicationEngine()
 
     url = QUrl("SimpleDialog.qml")
