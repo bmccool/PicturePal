@@ -10,3 +10,4 @@ FileBrowser.qml Example.qml
 SimpleDialog.qmlc
 SimpleDialog.spec
 *.pyc
+*.qmlc
