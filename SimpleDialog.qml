@@ -16,17 +16,30 @@ ApplicationWindow {
     toolBar:ToolBar {
         RowLayout {
             anchors.fill: parent
+            ToolButton { text: "Show Folders"}
             ToolButton {
                 text: "Add Folder"
                 onClicked: { loader.active = !loader.active }
             }
-            ToolButton {text: "Add Filter"}
+            ToolButton { text: "Add Filter" }
+            ToolButton { 
+                text: "Show Filters"
+                onClicked: { filterLoader.active = !filterLoader.active }
+            }
             ToolButton {
                 text: "Show Pictures"
                 onClicked: { slideShowLoader.active = !slideShowLoader.active }
             }
             Item { Layout.fillWidth:true }
         }
+    }
+
+    Loader {
+        id: filterLoader
+        source: "Filters.qml"
+        active: false
+        anchors.fill: parent
+        z: 10 // TODO can we make a ZTOP or something so we dont have magic numbers for z?
     }
 
     Loader {
