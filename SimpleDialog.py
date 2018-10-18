@@ -2,7 +2,7 @@ import sys
 from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
     QVBoxLayout, QDialog, QFileSystemModel, QTreeView)
 from PySide2.QtQuick import QQuickView
-from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Property, QAbstractItemModel, QAbstractListModel, Qt, QModelIndex
+from PySide2.QtCore import QUrl, QDir, QStringListModel, QObject, Signal, Slot, Property, QAbstractItemModel, QAbstractListModel, Qt, QModelIndex
 from PySide2.QtQml import QQmlApplicationEngine
 
 
@@ -27,6 +27,9 @@ class PictureModel(QAbstractListModel):
         return len(self._pictures)
 
     def data(self, QModelIndex, role=None):
+        print(str(QModelIndex.row()))
+        print(role)
+        print(self.FilenameRole)
         row = QModelIndex.row()
         if role == self.FilenameRole:
             return str(self._pictures[row][0])
@@ -36,6 +39,11 @@ class PictureModel(QAbstractListModel):
 
     def roleNames(self):
         return self._roles
+
+    #TODO shouldn't i be able to do this with data???
+    def getPicturePath(self, row):
+        return str(self._pictures[row][0])
+
 
 class Backend(QObject):
     textChanged = Signal(str)
@@ -67,6 +75,12 @@ class Backend(QObject):
         self.keywords = sort_dict(self.keywords)
         #TODO keywords model?
         self.pictureModel.setPictureList(self.pictures)
+
+    @Slot(int, result=str)
+    def getPicUrl(self, index):
+        print(str(index))
+        print(self.pictureModel.getPicturePath(index))
+        return self.pictureModel.getPicturePath(index)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

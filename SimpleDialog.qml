@@ -2,6 +2,7 @@ import QtQuick 2.1
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import Qt.labs.folderlistmodel 2.1
+import QtQml.Models 2.1
 import QtQuick.Layouts 1.11
 
 ApplicationWindow {
@@ -19,9 +20,42 @@ ApplicationWindow {
                 onClicked: { loader.active = !loader.active }
             }
             ToolButton {text: "Add Filter"}
-            ToolButton {text: "Show Pictures"}
+            ToolButton {
+                text: "Show Pictures"
+                onClicked: { slideShow.visible =! slideShow.visible }
+            }
             Item { Layout.fillWidth:true }
         }
+    }
+
+    Rectangle {
+        id: slideShow
+        anchors.fill: parent
+        color: "black"
+        visible: false
+        z: 10
+
+        property int index: 0
+        property variant rlist: []
+
+        function getNextUrl(){
+            console.log(backend.getPicUrl(index));
+            return "file:///" + backend.getPicUrl(index++); //filename
+        }
+
+        Image {
+            id: slideShowImage
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            source: getNextUrl()
+        }
+
+        MouseArea { 
+            anchors.fill: parent
+            z: 11
+            onClicked: { slideShowImage.source = parent.getNextUrl() }
+        }
+
     }
 
     MouseArea {
@@ -29,7 +63,6 @@ ApplicationWindow {
         z: 2
         onClicked: {
             loader.active = !loader.active
-
         }
     }
 
