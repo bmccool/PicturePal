@@ -27,9 +27,6 @@ class PictureModel(QAbstractListModel):
         return len(self._pictures)
 
     def data(self, QModelIndex, role=None):
-        print(str(QModelIndex.row()))
-        print(role)
-        print(self.FilenameRole)
         row = QModelIndex.row()
         if role == self.FilenameRole:
             return str(self._pictures[row][0])
@@ -78,8 +75,6 @@ class Backend(QObject):
 
     @Slot(int, result=str)
     def getPicUrl(self, index):
-        print(str(index))
-        print(self.pictureModel.getPicturePath(index))
         return self.pictureModel.getPicturePath(index)
 
 if __name__ == '__main__':

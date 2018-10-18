@@ -39,7 +39,6 @@ ApplicationWindow {
         property variant rlist: []
 
         function getNextUrl(){
-            console.log(backend.getPicUrl(index));
             return "file:///" + backend.getPicUrl(index++); //filename
         }
 
@@ -47,7 +46,7 @@ ApplicationWindow {
             id: slideShowImage
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
-            source: getNextUrl()
+            source: ""
         }
 
         MouseArea { 
@@ -93,12 +92,12 @@ ApplicationWindow {
         anchors.bottomMargin: 25
         anchors.topMargin: 25
 
-        model: pictureModel//folderModel//myModel
-        //delegate: folderDelegate//pictureDelegate
-        delegate: Row {
-            Text { text: name }
-            Text { text: caption }
-        }
+        model: folderModel//pictureModel//folderModel//myModel
+        delegate: folderDelegate//pictureDelegate
+        //delegate: Row {
+        //    Text { text: name }
+        //    Text { text: caption }
+        //}
         z: 1
     }
 
