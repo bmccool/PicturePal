@@ -22,47 +22,18 @@ ApplicationWindow {
             ToolButton {text: "Add Filter"}
             ToolButton {
                 text: "Show Pictures"
-                onClicked: { slideShow.visible =! slideShow.visible }
+                onClicked: { slideShowLoader.active = !slideShowLoader.active }
             }
             Item { Layout.fillWidth:true }
         }
     }
 
-    Rectangle {
-        id: slideShow
+    Loader {
+        id: slideShowLoader
+        source: "SlideShow.qml"
+        active: false
         anchors.fill: parent
-        color: "black"
-        visible: false
-        z: 10
-
-        property int index: 0
-        property variant rlist: []
-
-        function getNextUrl(){
-            return "file:///" + backend.getPicUrl(index++); //filename
-        }
-
-        Image {
-            id: slideShowImage
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectFit
-            source: ""
-        }
-
-        MouseArea { 
-            anchors.fill: parent
-            z: 11
-            onClicked: { slideShowImage.source = parent.getNextUrl() }
-        }
-
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        z: 2
-        onClicked: {
-            loader.active = !loader.active
-        }
+        z: 10 // TODO can we make a ZTOP or something so we dont have magic numbers for z?
     }
 
     ListModel {

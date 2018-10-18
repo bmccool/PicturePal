@@ -77,6 +77,10 @@ class Backend(QObject):
     def getPicUrl(self, index):
         return self.pictureModel.getPicturePath(index)
 
+    @Slot(result=int)
+    def numPics(self):
+        return self.pictureModel.rowCount(None)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
