@@ -1,93 +1,78 @@
-import QtQuick 2.11
-import QtQuick.Dialogs 1.2
-import QtQuick.Controls 1.4
-import Qt.labs.folderlistmodel 2.1
-import QtQml.Models 2.1
-import QtQuick.Layouts 1.11
+import QtQuick 2.1
 
 Rectangle {
-    id: filters
-    anchors.fill: parent
-    z: 10
-    //color: "green"
+    width: 640
+    height: 480
+    color: "black"
 
-    ListModel {
-        id: filterModel
+    Suggestions {
+        id: suggestions
     }
-
-    Component {
-        id: filterDelegate
-        Item{
-            width: parent.width
-            height: 20
-            Row {
-                spacing: 10
-                Text { text: display }
-            }
-            MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: {
-                    filterView.currentIndex = index
-                    if (mouse.button === Qt.RightButton) {
-                        contextMenu.popup()
-                    }
-                }
-                Menu {
-                    id: contextMenu
-                    MenuItem { 
-                        text: "Remove filter"
-                        onTriggered: { removeFilter(index) }
-                    }
-                }
-            }
-
-        }
-    }    
-
-    //Column {
-
-        /*
-    	ListView {
-        	id: filterView
-        	anchors.fill: parent
-        	anchors.leftMargin: 25
-        	anchors.rightMargin: 25
-        	anchors.bottomMargin: 25
-        	anchors.topMargin: 25
-
-        	highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-        	focus: true
-
-        	model: filterModel
-        	delegate: filterDelegate
-	        z: 1
-    	}
-    	*/   
-    //}
 
     Item {
-    	id: contents
-    	width: parent.width - 100
-    	height: parent.height - 100
-    	anchors.verticalCenter: parent.verticalCenter
-    	anchors.horizontalCenter: parent.horizontalCenter
+        id: contents
+        width: parent.width - 100
+        height: parent.height - 100
+        anchors.centerIn: parent
 
-    	FocusScope {
-    		id: focusScope
-            TextInput: {
-            	id: textInputComponent
-            	//anchors { left: parent.left; leftMargin: 4; right: parent.left; rightMargin: 4; verticalCenter: parent.verticalCenter }
-            	focus: true
-            	selectByMouse: true
-            	color: "black"
+        LineEdit {
+            id: inputField
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 18
 
+            hint.text: "Enter text. It will be completed with lines below"
+            borderColor: "white"
+
+            function activateSuggestionAt(offset) {
+                var max = suggestionsBox.count
+                if(max == 0)
+                    return
+
+                var newIndex = ((suggestionsBox.currentIndex + 1 + offset) % (max + 1)) - 1
+                suggestionsBox.currentIndex = newIndex
             }
-    	}
-    }
+            onUpPressed: activateSuggestionAt(-1)
+            onDownPressed: activateSuggestionAt(+1)
+            onEnterPressed: processEnter()
+            onAccepted: processEnter()
 
-   function removeFolder(index) {
-         console.log("removeFolder!")
+            Component.onCompleted: {
+                inputField.forceActiveFocus()
+            }
+
+            function processEnter() {
+                if (suggestionsBox.currentIndex === -1) {
+                    console.log("Enter pressed in input field")
+                } else {
+                    suggestionsBox.complete(suggestionsBox.currentItem)
+                }
+            }
+        }
+
+        SuggestionsPreview {
+            // just to show you what you can type in
+            model: suggestions
+        }
+
+        SuggestionBox {
+            id: suggestionsBox
+            model: suggestions
+            width: 200
+            anchors.top: inputField.bottom
+            anchors.left: inputField.left
+            filter: inputField.textInput.text
+            property: "name"
+            onItemSelected: complete(item)
+
+            function complete(item) {
+                suggestionsBox.currentIndex = -1
+                if (item !== undefined)
+                    inputField.textInput.text = item.name
+            }
+        }
+
     }
 
 }

@@ -11,3 +11,5 @@ SimpleDialog.qmlc
 SimpleDialog.spec
 *.pyc
 *.qmlc
+AutoComplete Example/QmlCompletionBox.qmlproject
+Main.qml

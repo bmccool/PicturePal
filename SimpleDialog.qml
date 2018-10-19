@@ -34,13 +34,7 @@ ApplicationWindow {
         }
     }
 
-    Loader {
-        id: filterLoader
-        source: "Filters.qml"
-        active: false
-        anchors.fill: parent
-        z: 10 // TODO can we make a ZTOP or something so we dont have magic numbers for z?
-    }
+    Filters {}
 
     Loader {
         id: slideShowLoader
@@ -97,7 +91,7 @@ ApplicationWindow {
             backend.text = folderModel.get(i).folder
         }
     }
-
+/*
     ListView {
         id: folderView
         anchors.fill: parent
@@ -118,7 +112,7 @@ ApplicationWindow {
         //}
         z: 1
     }
-
+*/
 
     Loader { 
         id: loader
