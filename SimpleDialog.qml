@@ -16,7 +16,14 @@ ApplicationWindow {
     toolBar:ToolBar {
         RowLayout {
             anchors.fill: parent
-            ToolButton { text: "Show Folders"}
+            ToolButton { 
+                text: "Show Folders"
+                onClicked: {
+                    folderView.visible = true
+                    filterView.visible = false
+                    slideShowLoader.active = false
+                }
+            }
             ToolButton {
                 text: "Add Folder"
                 onClicked: { loader.active = !loader.active }
@@ -24,17 +31,29 @@ ApplicationWindow {
             ToolButton { text: "Add Filter" }
             ToolButton { 
                 text: "Show Filters"
-                onClicked: { filterLoader.active = !filterLoader.active }
+                onClicked: {
+                    folderView.visible = false
+                    filterView.visible = true
+                    slideShowLoader.active = false
+                }
             }
             ToolButton {
                 text: "Show Pictures"
-                onClicked: { slideShowLoader.active = !slideShowLoader.active }
+                onClicked: {
+                    folderView.visible = false
+                    filterView.visible = false
+                    slideShowLoader.active = true
+                }
             }
             Item { Layout.fillWidth:true }
+
         }
     }
 
-    Filters {}
+    Filters {
+        id: filterView
+        visible: false
+    }
 
     Loader {
         id: slideShowLoader
@@ -44,6 +63,7 @@ ApplicationWindow {
         z: 10 // TODO can we make a ZTOP or something so we dont have magic numbers for z?
     }
 
+    // TODO can window state be stored in settings?  A: yes, it can
     PicturePalSettings {}
 
     ListModel {
@@ -91,9 +111,10 @@ ApplicationWindow {
             backend.text = folderModel.get(i).folder
         }
     }
-/*
+
     ListView {
         id: folderView
+        visible: true
         anchors.fill: parent
         anchors.leftMargin: 25
         anchors.rightMargin: 25
@@ -112,7 +133,7 @@ ApplicationWindow {
         //}
         z: 1
     }
-*/
+
 
     Loader { 
         id: loader
