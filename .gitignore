@@ -13,3 +13,5 @@ SimpleDialog.spec
 *.qmlc
 AutoComplete Example/QmlCompletionBox.qmlproject
 Main.qml
+*.qmlc
+SlideShow.qmlc
