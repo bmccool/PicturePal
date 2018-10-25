@@ -38,17 +38,31 @@ def process_file(filename):
 
     return [filename, info.data["caption/abstract"], info.keywords]
 
-def get_keywords(pictures):
+def get_keywords_counts(pictures):
     """ Want to return: list of keywords, times they appear """
     keywords = {}
     logger.debug("There are " + str(len(pictures)) + " pictures.")
     for picture in pictures:
         for word in picture[2]:
+            word = word.decode("utf-8")
             if word not in keywords.keys():
                 keywords[word] = 1
             else:
                 keywords[word] = keywords[word] + 1
     return keywords
+
+def get_keywords(pictures):
+    """ Want to return: list of keywords, times they appear """
+    keywords = []
+    logger.debug("There are " + str(len(pictures)) + " pictures.")
+    for picture in pictures:
+        for word in picture[2]:
+            word = word.decode("utf-8")
+            if word not in keywords:
+                keywords.append(str(word))
+    keywords.sort()
+    return keywords
+
 
 def get_all_pictures(path, pictures=None):
     if pictures == None:

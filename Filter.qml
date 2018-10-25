@@ -23,17 +23,22 @@ Item {
 
     // filters out all items of source model that does not match filter
     function invalidateFilter() {
-        if (sourceModel === undefined)
-            return;
+        console.log("INVALIDATING FILTER")
+        if (sourceModel === undefined) {
+            return
+        }
 
         filterModel.clear();
 
-        if (!isFilteringPropertyOk())
+        if (!isFilteringPropertyOk()) {
             return
+        }
 
-        var length = sourceModel.count
+        var length = sourceModel.rowCount()
         for (var i = 0; i < length; ++i) {
-            var item = sourceModel.get(i);
+            // TODO How to get data at index i from keywordModel???
+            var item = sourceModel.data(i, "display");
+            console.log(item)
             if (isAcceptedItem(item)) {
                 filterModel.append(item)
             }

@@ -66,12 +66,13 @@ FocusScope {
 
         onClicked: { textInput.text = ''; focusScope.focus = true; textInput.openSoftwareInputPanel(); }
 
-        Image {
-            width: 16
-            height: 16
-            anchors.centerIn: parent
-            source: "resources/icons/clear-text-rtl.png"
-        }
+        // TODO binding loop on width and height?
+        //Image {
+        //    width: 16
+        //    height: 16
+        //    anchors.centerIn: parent
+        //    source: "resources/icons/clear-text-rtl.png"
+        //}
     }
 
     states: State {

@@ -40,7 +40,8 @@ Rectangle {
         NumberAnimation{}
     }
     function filterMatchesLastSuggestion() {
-        return suggestionsModel.count == 1 && suggestionsModel.get(0).name === filter
+        console.log(suggestionsModel.get(0).display)
+        return suggestionsModel.count == 1 && suggestionsModel.get(0).display === filter
     }
 
 
@@ -100,7 +101,7 @@ Rectangle {
                     Text {
                         id: textComponent
                         color: delegateItem.selected ? "yellow" : "white"
-                        text: suggestion.name
+                        text: suggestion.display
                         width: parent.width - 4
                         anchors.horizontalCenter: parent.horizontalCenter
                     }

@@ -23,7 +23,7 @@ Rectangle {
             height: 18
 
             hint.text: "Enter text. It will be completed with lines below"
-            borderColor: "white"
+            borderColor: "red"
 
             function activateSuggestionAt(offset) {
                 var max = suggestionsBox.count
@@ -53,23 +53,24 @@ Rectangle {
 
         SuggestionsPreview {
             // just to show you what you can type in
-            model: suggestions
+            model: keywordModel
         }
 
         SuggestionBox {
             id: suggestionsBox
-            model: suggestions
+            model: keywordModel
             width: 200
             anchors.top: inputField.bottom
             anchors.left: inputField.left
             filter: inputField.textInput.text
-            property: "name"
+            property: "display"
             onItemSelected: complete(item)
 
             function complete(item) {
                 suggestionsBox.currentIndex = -1
                 if (item !== undefined)
-                    inputField.textInput.text = item.name
+                    console.log(item.display)
+                    inputField.textInput.text = item.display
             }
         }
 

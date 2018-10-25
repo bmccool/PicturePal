@@ -49,6 +49,7 @@ class Backend(QObject):
         QObject.__init__(self, parent)
         self.m_text = ""
         self.pictureModel = PictureModel()
+        self.keywordModel = QStringListModel()
         self.pictures = None
         self.keywords = None
 
@@ -69,11 +70,14 @@ class Backend(QObject):
         folder = folder.strip("file:///") # Remove unnecessary bits
         #TODO get_all_pictures shouldn't overwrite what's in pictures, but add to it.
         self.pictures = get_all_pictures(folder)
-        #TODO this can be one line right?
-        self.keywords = get_keywords(self.pictures)
-        self.keywords = sort_dict(self.keywords)
+        self.updateKeywordModel()
         #TODO keywords model?
         self.pictureModel.setPictureList(self.pictures)
+
+    def updateKeywordModel(self):
+        self.keywords = get_keywords(self.pictures)
+        print(self.keywords)
+        self.keywordModel.setStringList(self.keywords)
 
     @Slot(int, result=str)
     def getPicUrl(self, index):
@@ -99,11 +103,11 @@ if __name__ == '__main__':
     url = QUrl("SimpleDialog.qml")
 
     backend = Backend()
-    #backend.textChanged.connect(lambda text: print(text))
     backend.textChanged.connect(lambda text: backend.processFolder(text))
 
     #Expose a model to the QML code
     engine.rootContext().setContextProperty("pictureModel", backend.pictureModel)
+    engine.rootContext().setContextProperty("keywordModel", backend.keywordModel)
     engine.rootContext().setContextProperty("backend", backend)
 
     engine.load(url)
