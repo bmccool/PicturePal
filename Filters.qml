@@ -22,7 +22,7 @@ Rectangle {
             anchors.right: parent.right
             height: 18
 
-            hint.text: "Enter text. It will be completed with lines below"
+            hint.text: "Enter a keyword. Possible keywords are listed below"
             borderColor: "red"
 
             function activateSuggestionAt(offset) {
@@ -44,8 +44,10 @@ Rectangle {
 
             function processEnter() {
                 if (suggestionsBox.currentIndex === -1) {
-                    console.log("Enter pressed in input field")
-                } else {
+                	console.log("USER HAS SELECTED: " + textInput.text)
+                	//TODO do something with textInput.text
+                	textInput.text = ''
+                } else {            	
                     suggestionsBox.complete(suggestionsBox.currentItem)
                 }
             }
@@ -70,7 +72,6 @@ Rectangle {
             function complete(item) {
                 suggestionsBox.currentIndex = -1
                 if (item !== undefined)
-                    console.log(item.name)
                     inputField.textInput.text = item.name
             }
         }

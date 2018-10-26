@@ -69,7 +69,8 @@ Rectangle {
 
 
         property int selectedIndex: -1
-        property variant selectedItem: selectedIndex === -1 ? undefined : model.data(model.index(selectedIndex, 0))
+        //TODO this line is wrong, it is picking a keyword from all keywords, when it should be picking a keyword from the limited selection shown of keywords in the popup
+        property variant selectedItem: selectedIndex === -1 ? undefined : suggestionsModel.get(selectedIndex)
         signal suggestionClicked(variant suggestion)
 
         opacity: container.visible ? 1.0 : 0
