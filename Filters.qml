@@ -44,8 +44,8 @@ Rectangle {
 
             function processEnter() {
                 if (suggestionsBox.currentIndex === -1) {
-                	console.log("USER HAS SELECTED: " + textInput.text)
-                	//TODO do something with textInput.text
+                	//TODO should this be a function that just takes text input in order to generalize for keyboard/mouse/other input?
+                	backend.selectKeyword(textInput.text)
                 	textInput.text = ''
                 } else {            	
                     suggestionsBox.complete(suggestionsBox.currentItem)

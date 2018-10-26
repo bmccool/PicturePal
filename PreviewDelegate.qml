@@ -9,6 +9,8 @@ Item {
     Rectangle {
         id: itemRect
 
+        property bool selected: itemMouseArea.containsMouse        
+
         height: textComponent.height
         width: parent.width - 2
 
@@ -19,7 +21,7 @@ Item {
         radius: 5
         border {
             width: 2
-            color: "gray"
+            color: itemMouseArea.containsMouse ? "white" : "grey"
         }
 
         Text {
@@ -28,6 +30,12 @@ Item {
             id: textComponent
             color: "white"
             text: delegate.text
+        }
+        MouseArea {
+            id: itemMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: console.log("TODO: CLICKED: " + textComponent.text + " AND DID NOTHING")        
         }
     }
 }

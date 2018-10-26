@@ -50,8 +50,10 @@ class Backend(QObject):
         self.m_text = ""
         self.pictureModel = PictureModel()
         self.keywordModel = QStringListModel()
+        self.selectedKeywordsModel = QStringListModel()
         self.pictures = None
         self.keywords = None
+        self.folders = []
 
     @Property(str, notify=textChanged)
     def text(self):
@@ -68,6 +70,7 @@ class Backend(QObject):
 
     def processFolder(self, folder):
         folder = folder.strip("file:///") # Remove unnecessary bits
+        if folder not in self.folders: self.folders.append(folder)
         #TODO get_all_pictures shouldn't overwrite what's in pictures, but add to it.
         self.pictures = get_all_pictures(folder)
         self.updateKeywordModel()
@@ -86,6 +89,26 @@ class Backend(QObject):
     @Slot(result=int)
     def numPics(self):
         return self.pictureModel.rowCount(None)
+
+    @Slot(str)
+    def selectKeyword(self, keyword):
+        print("selecting keyword: " + str(keyword))
+        #Only do anything if the keyword is not already in the selected list
+        if keyword not in self.selectedKeywordsModel.stringList():
+            #Add keyword to selected list
+            self.selectedKeywordsModel.setStringList([*self.selectedKeywordsModel.stringList(), keyword])
+            self.filterKeywords()
+
+    def filterKeywords(self):
+
+        def f(x):
+            for keyword in self.selectedKeywordsModel.stringList():
+                if keyword in x[2]:
+                    return True
+            return False
+
+        self.pictures = [*filter(f, self.pictures)]
+        self.pictureModel.setPictureList(self.pictures)
 
     @Slot()
     def clearPics(self):

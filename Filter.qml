@@ -45,11 +45,18 @@ Item {
 
     // returns true if item is accepted by filter
     function isAcceptedItem(item) {
+        // Reject item if it is undefined...
         if (item === undefined) {
             return false
         }
 
+        // Reject item if the filter cannot be found in the item
         if (item.match(this.filter) === null) {
+            return false
+        }
+
+        // Reject the item if it is the filter in it's entirety (it's already there, no need to suggest)
+        if (item === this.filter) {
             return false
         }
 

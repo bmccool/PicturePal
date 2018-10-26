@@ -36,7 +36,11 @@ def process_file(filename):
     info = IPTCInfo(filename)
     if len(info.data) < 4: raise Exception(info.error)
 
-    return [filename, info.data["caption/abstract"], info.keywords]
+    keywords = []
+    for keyword in info.keywords:
+        keywords.append(keyword.decode("utf-8"))
+
+    return [filename, info.data["caption/abstract"], keywords]
 
 def get_keywords_counts(pictures):
     """ Want to return: list of keywords, times they appear """
@@ -44,7 +48,6 @@ def get_keywords_counts(pictures):
     logger.debug("There are " + str(len(pictures)) + " pictures.")
     for picture in pictures:
         for word in picture[2]:
-            word = word.decode("utf-8")
             if word not in keywords.keys():
                 keywords[word] = 1
             else:
@@ -57,7 +60,6 @@ def get_keywords(pictures):
     logger.debug("There are " + str(len(pictures)) + " pictures.")
     for picture in pictures:
         for word in picture[2]:
-            word = word.decode("utf-8")
             if word not in keywords:
                 keywords.append(str(word))
     keywords.sort()
