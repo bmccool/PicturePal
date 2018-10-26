@@ -40,7 +40,6 @@ Rectangle {
         NumberAnimation{}
     }
     function filterMatchesLastSuggestion() {
-        console.log(suggestionsModel.get(0).display)
         return suggestionsModel.count == 1 && suggestionsModel.get(0).display === filter
     }
 
@@ -70,7 +69,7 @@ Rectangle {
 
 
         property int selectedIndex: -1
-        property variant selectedItem: selectedIndex === -1 ? undefined : model.get(selectedIndex)
+        property variant selectedItem: selectedIndex === -1 ? undefined : model.data(model.index(selectedIndex, 0))
         signal suggestionClicked(variant suggestion)
 
         opacity: container.visible ? 1.0 : 0
@@ -101,7 +100,7 @@ Rectangle {
                     Text {
                         id: textComponent
                         color: delegateItem.selected ? "yellow" : "white"
-                        text: suggestion.display
+                        text: suggestion.name
                         width: parent.width - 4
                         anchors.horizontalCenter: parent.horizontalCenter
                     }

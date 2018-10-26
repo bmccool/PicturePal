@@ -57,20 +57,21 @@ Rectangle {
         }
 
         SuggestionBox {
+        	//TODO Binding loop detected for property "height"
             id: suggestionsBox
             model: keywordModel
             width: 200
             anchors.top: inputField.bottom
             anchors.left: inputField.left
             filter: inputField.textInput.text
-            property: "display"
+            property: "name"
             onItemSelected: complete(item)
 
             function complete(item) {
                 suggestionsBox.currentIndex = -1
                 if (item !== undefined)
-                    console.log(item.display)
-                    inputField.textInput.text = item.display
+                    console.log(item.name)
+                    inputField.textInput.text = item.name
             }
         }
 

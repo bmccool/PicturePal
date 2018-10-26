@@ -23,7 +23,6 @@ Item {
 
     // filters out all items of source model that does not match filter
     function invalidateFilter() {
-        console.log("INVALIDATING FILTER")
         if (sourceModel === undefined) {
             return
         }
@@ -36,11 +35,9 @@ Item {
 
         var length = sourceModel.rowCount()
         for (var i = 0; i < length; ++i) {
-            // TODO How to get data at index i from keywordModel???
-            var item = sourceModel.data(i, "display");
-            console.log(item)
+            var item = sourceModel.data(sourceModel.index(i, 0));
             if (isAcceptedItem(item)) {
-                filterModel.append(item)
+                filterModel.append({"name":item})
             }
         }
     }
@@ -48,10 +45,11 @@ Item {
 
     // returns true if item is accepted by filter
     function isAcceptedItem(item) {
-        if (item[this.property] === undefined)
+        if (item === undefined) {
             return false
+        }
 
-        if (item[this.property].match(this.filter) === null) {
+        if (item.match(this.filter) === null) {
             return false
         }
 
